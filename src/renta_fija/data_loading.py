@@ -32,12 +32,10 @@ def load_universo(path: str, valuation_date: datetime = DEFAULT_VALUATION_DATE) 
                 errors="coerce",
             )
 
-    # Tiempo a vencimiento en años (desde la fecha de valoración)
     univ["Ttm_years"] = (univ["Maturity"] - valuation_date).dt.days / 365
 
-    # Filtro sencillo: solo bonos en EUR y con vencimiento futuro
-    if "Ccy" in univ.columns:
-        univ = univ[(univ["Ccy"] == "EUR") & (univ["Ttm_years"] > 0)].copy()
+    # Filtro: solo vencimiento futuro 
+    univ = univ[univ["Ttm_years"] > 0].copy()
 
     return univ
 
